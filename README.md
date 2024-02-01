@@ -1,16 +1,15 @@
-# json_schema_validate
+# JSON Schema Validator written in Dart/Flutter
 
-A new Flutter project.
+# Application on Vercel
 
-## Getting Started
+[JSON Schema Validator](https://json-schema-validator.vercel.app/)
 
-This project is a starting point for a Flutter application.
+# Remote schemas
 
-A few resources to get you started if this is your first Flutter project:
+To preload schema defined on some resource you can add `/validate?schema=<url>` to application address
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Example: [https://json-schema-validator.vercel.app/validate?schema=https://json.schemastore.org/vsconfig.json](https://json-schema-validator.vercel.app/validate?schema=https://json.schemastore.org/vsconfig.json)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Probably you will encounter CORS errors - see next example
+
+CORS Proxy Example: [https://json-schema-validator.vercel.app/validate?schema=https://corsproxy.io?https://json.schemastore.org/vsconfig.json](https://json-schema-validator.vercel.app/validate?schema=https://corsproxy.io?https://json.schemastore.org/vsconfig.json)
