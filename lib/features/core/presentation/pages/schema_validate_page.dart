@@ -1,9 +1,13 @@
 // ignore_for_file: implementation_imports
 
-import 'dart:convert';
+import 'dart:convert' hide json;
 
+import 'package:code_text_field/code_text_field.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_highlight/themes/a11y-light.dart';
+import 'package:flutter_highlight/themes/monokai-sublime.dart';
+import 'package:highlight/languages/json.dart';
 import 'package:json_schema/json_schema.dart';
 import 'package:json_schema/src/json_schema/models/validation_results.dart';
 import 'package:json_schema_validate/features/core/presentation/pages/loading_schema_page.dart';
@@ -18,7 +22,7 @@ class SchemaValidatePage extends StatefulWidget {
 }
 
 class _SchemaValidatePageState extends State<SchemaValidatePage> {
-  late final TextEditingController _schemaController = TextEditingController()
+  late final CodeController _schemaController = CodeController(language: json)
     ..addListener(() {
       setState(() {
         try {
@@ -27,13 +31,11 @@ class _SchemaValidatePageState extends State<SchemaValidatePage> {
           if (isRemote) {
             isRemote = false;
             _schemaController.text = '';
-          } else {
-            rethrow;
           }
         }
       });
     });
-  late final TextEditingController _jsonController = TextEditingController()..addListener(() => setState(() {}));
+  late final CodeController _jsonController = CodeController(language: json)..addListener(() => setState(() {}));
 
   JsonSchema? _schema;
   late bool isRemote = widget.schema != null;
@@ -76,33 +78,33 @@ class _SchemaValidatePageState extends State<SchemaValidatePage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: Column(
-              children: [
-                if (!isRemote)
+            child: CodeTheme(
+              data: const CodeThemeData(styles: a11yLightTheme),
+              child: Column(
+                children: [
+                  if (!isRemote)
+                    Expanded(
+                      child: SectionWidget(
+                        child: CodeField(
+                          background: Colors.transparent,
+                          controller: _schemaController,
+                          maxLines: null,
+                          expands: true,
+                        ),
+                      ),
+                    ),
                   Expanded(
                     child: SectionWidget(
-                      child: TextField(
-                        controller: _schemaController,
-                        autofocus: !isRemote,
-                        decoration: const InputDecoration.collapsed(hintText: 'JSON Schema'),
+                      child: CodeField(
+                        background: Colors.transparent,
+                        controller: _jsonController,
                         maxLines: null,
+                        expands: true,
                       ),
                     ),
                   ),
-                Expanded(
-                  child: SectionWidget(
-                    child: TextField(
-                      controller: _jsonController,
-                      autofocus: isRemote,
-                      decoration: const InputDecoration(
-                        labelText: 'JSON',
-                        border: InputBorder.none,
-                      ),
-                      maxLines: null,
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           Expanded(
